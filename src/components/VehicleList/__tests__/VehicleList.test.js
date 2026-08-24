@@ -1,9 +1,26 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import VehicleList from '..';
+import VehicleList, { findMediaUrl } from '..';
 import useData from '../useData';
 
 jest.mock('../useData');
+
+const xe = {
+  id: 'xe',
+  apiUrl: '/api/vehicle_xe.json',
+  media: [
+    { name: 'vehicle', url: '/images/16x9/xe_k17.jpg' },
+    { name: 'vehicle', url: '/images/1x1/xe_k17.jpg' },
+  ],
+  price: '£30,000',
+  description: 'The most advanced, efficient and refined sports saloon that Jaguar has ever produced.',
+  meta: {
+    passengers: 5,
+    drivetrain: ['AWD', 'RWD'],
+    bodystyles: ['saloon'],
+    emissions: { value: 99 },
+  },
+};
 
 describe('<VehicleList /> Tests', () => {
   it('Should show loading state if it not falsy', () => {
@@ -25,12 +42,21 @@ describe('<VehicleList /> Tests', () => {
   });
 
   it('Should show results if loading successfully finished', () => {
-    useData.mockReturnValue([false, false, 'results']);
+    useData.mockReturnValue([false, false, [xe]]);
     const { queryByTestId } = render(<VehicleList />);
 
     expect(queryByTestId('loading')).toBeNull();
     expect(queryByTestId('error')).toBeNull();
     expect(queryByTestId('results')).not.toBeNull();
+  });
+
+  it('Should render the vehicle name, price, and description', () => {
+    useData.mockReturnValue([false, false, [xe]]);
+    const { getByRole, getByText } = render(<VehicleList />);
+
+    expect(getByRole('button', { name: /^xe$/i })).not.toBeNull();
+    expect(getByText('From £30,000')).not.toBeNull();
+    expect(getByText(/most advanced, efficient and refined/i)).not.toBeNull();
   });
 
   it('Should show empty state when the vehicles array is empty', () => {
@@ -50,5 +76,22 @@ describe('<VehicleList /> Tests', () => {
 
     fireEvent.click(getByRole('button', { name: /try again/i }));
     expect(retry).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('findMediaUrl helper', () => {
+  const bothVariants = [
+    { name: 'vehicle', url: '/images/16x9/xe_k17.jpg' },
+    { name: 'vehicle', url: '/images/1x1/xe_k17.jpg' },
+  ];
+
+  it('Should return the matching aspect-ratio URL', () => {
+    expect(findMediaUrl(bothVariants, '1x1')).toBe('/images/1x1/xe_k17.jpg');
+    expect(findMediaUrl(bothVariants, '16x9')).toBe('/images/16x9/xe_k17.jpg');
+  });
+
+  it('Should fall back to the first media entry when no aspect ratio matches', () => {
+    const singleVariant = [{ name: 'vehicle', url: '/images/16x9/xe_k17.jpg' }];
+    expect(findMediaUrl(singleVariant, '1x1')).toBe('/images/16x9/xe_k17.jpg');
   });
 });
