@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import VehicleList, { findMediaUrl } from '..';
 import useData from '../useData';
@@ -110,7 +110,23 @@ describe('<VehicleList /> Tests', () => {
     expect(queryByText(/passengers/i)).not.toBeNull();
   });
 
-  it('Should close the modal when Escape is pressed', () => {
+  it('Should clear modal content when the dialog close event fires', () => {
+    // Real Escape dismissal is browser-native; jsdom does not fire it from keyDown.
+    useData.mockReturnValue([false, false, [xe]]);
+    const { container, getByRole, queryByText } = render(<VehicleList />);
+    const dialog = container.querySelector('.vehicle-details');
+
+    fireEvent.click(getByRole('button', { name: /^xe$/i }));
+    expect(dialog.open).toBe(true);
+    expect(queryByText(/passengers/i)).not.toBeNull();
+
+    act(() => {
+      dialog.dispatchEvent(new Event('close'));
+    });
+    expect(queryByText(/passengers/i)).toBeNull();
+  });
+
+  it('Should close the modal when the backdrop is clicked', () => {
     useData.mockReturnValue([false, false, [xe]]);
     const { container, getByRole } = render(<VehicleList />);
     const dialog = container.querySelector('.vehicle-details');
@@ -118,9 +134,35 @@ describe('<VehicleList /> Tests', () => {
     fireEvent.click(getByRole('button', { name: /^xe$/i }));
     expect(dialog.open).toBe(true);
 
-    fireEvent.keyDown(dialog, { key: 'Escape' });
-    dialog.close();
+    act(() => {
+      fireEvent.click(dialog);
+    });
     expect(dialog.open).toBe(false);
+  });
+
+  it('Should not open the modal when the vehicle has no meta', () => {
+    const noMeta = { ...xe, meta: undefined };
+    useData.mockReturnValue([false, false, [noMeta]]);
+    const { container, getByRole } = render(<VehicleList />);
+    const dialog = container.querySelector('.vehicle-details');
+
+    fireEvent.click(getByRole('button', { name: /^xe$/i }));
+    expect(dialog.open).toBe(false);
+  });
+
+  it('Should render the dialog shell when meta fields are incomplete', () => {
+    const partialMeta = {
+      ...xe,
+      meta: { passengers: 5 },
+    };
+    useData.mockReturnValue([false, false, [partialMeta]]);
+    const { container, getByRole } = render(<VehicleList />);
+    const dialog = container.querySelector('.vehicle-details');
+
+    fireEvent.click(getByRole('button', { name: /^xe$/i }));
+    expect(dialog.open).toBe(true);
+    expect(dialog.querySelector('#vehicle-details-title')).not.toBeNull();
+    expect(getByRole('button', { name: /close/i })).not.toBeNull();
   });
 
   it('Should have no axe violations on the list, empty, error, loading, and open modal', async () => {
@@ -162,5 +204,11 @@ describe('findMediaUrl helper', () => {
   it('Should fall back to the first media entry when no aspect ratio matches', () => {
     const singleVariant = [{ name: 'vehicle', url: '/images/16x9/xe_k17.jpg' }];
     expect(findMediaUrl(singleVariant, '1x1')).toBe('/images/16x9/xe_k17.jpg');
+  });
+
+  it('Should return an empty string when media is missing or empty', () => {
+    expect(findMediaUrl(undefined, '1x1')).toBe('');
+    expect(findMediaUrl(null, '16x9')).toBe('');
+    expect(findMediaUrl([], '1x1')).toBe('');
   });
 });
