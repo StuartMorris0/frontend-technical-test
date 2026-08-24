@@ -1,3 +1,224 @@
-.VehicleList {
-  width: 100%;
+@import "../../variables";
+
+.vehicle-list {
+  display: grid;
+  gap: 0;
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @media (min-width: $breakpoint-tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  &__item {
+    border-bottom: 1px solid $color-rule;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      border-bottom: 1px solid $color-rule;
+      border-right: 0;
+
+      &:nth-child(odd) {
+        border-right: 1px solid $color-rule;
+      }
+
+      &:nth-last-child(-n+2) {
+        border-bottom: 0;
+      }
+    }
+
+    @media (min-width: $breakpoint-desktop) {
+      border-bottom: 0;
+      border-right: 1px solid $color-rule;
+
+      &:nth-child(odd) {
+        border-right: 1px solid $color-rule;
+      }
+
+      &:nth-child(4n) {
+        border-right: 0;
+      }
+    }
+  }
+
+  &__error {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  &__error-title {
+    color: $color-text;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin: 0 0 .5rem;
+    text-transform: uppercase;
+  }
+
+  &__error-message {
+    color: $color-description;
+    font-size: .875rem;
+    margin: 0 0 1.5rem;
+  }
+
+  &__retry {
+    background: $color-text;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: .875rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    padding: .75rem 2rem;
+    text-transform: uppercase;
+
+    &:hover:not(:disabled) {
+      background: #333;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-focus;
+      outline-offset: 2px;
+    }
+  }
+}
+
+.vehicle-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  position: relative;
+
+  @media (min-width: $breakpoint-tablet) {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  &__picture {
+    display: block;
+    flex-shrink: 0;
+    position: relative;
+    width: 35%;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: 100%;
+    }
+
+    &::after {
+      background: $color-overlay;
+      bottom: 0;
+      content: "";
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: opacity 200ms ease;
+    }
+  }
+
+  &:hover &__picture::after,
+  &:focus-within &__picture::after {
+    opacity: 1;
+  }
+
+  &__image {
+    aspect-ratio: 1 / 1;
+    display: block;
+    object-fit: cover;
+    width: 100%;
+
+    @media (min-width: $breakpoint-tablet) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    padding: 0;
+    text-align: left;
+
+    @media (min-width: $breakpoint-tablet) {
+      padding: 1.25rem 1rem 1.5rem;
+      text-align: center;
+    }
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin: 0 0 .25rem;
+    text-transform: uppercase;
+
+    @media (min-width: $breakpoint-tablet) {
+      margin: 0 0 .75rem;
+    }
+  }
+
+  &__name-button {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: inherit;
+    margin: 0;
+    padding: 0;
+    text-align: inherit;
+    text-transform: inherit;
+
+    &::after {
+      bottom: 0;
+      content: "";
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-focus;
+      outline-offset: 4px;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      border-bottom: 1px solid currentColor;
+      border-top: 1px solid currentColor;
+      display: inline-block;
+      padding: .5rem 0;
+    }
+  }
+
+  &__price {
+    color: $color-text;
+    font-size: .875rem;
+    font-weight: 400;
+    margin: 0 0 .5rem;
+  }
+
+  &__description {
+    color: $color-description;
+    font-size: .875rem;
+    font-weight: 300;
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vehicle-card__picture::after {
+    transition: none;
+  }
 }
