@@ -26,27 +26,33 @@
     @media (min-width: $breakpoint-tablet) {
       border-bottom: 1px solid $color-rule;
       border-right: 0;
-
-      &:nth-child(odd) {
-        border-right: 1px solid $color-rule;
-      }
-
-      &:nth-last-child(-n+2) {
-        border-bottom: 0;
-      }
     }
 
     @media (min-width: $breakpoint-desktop) {
       border-bottom: 0;
       border-right: 1px solid $color-rule;
+    }
+  }
 
-      &:nth-child(odd) {
-        border-right: 1px solid $color-rule;
-      }
+  @media (min-width: $breakpoint-tablet) {
 
-      &:nth-child(4n) {
-        border-right: 0;
-      }
+    &__item:nth-child(odd) {
+      border-right: 1px solid $color-rule;
+    }
+
+    &__item:nth-last-child(-n+2) {
+      border-bottom: 0;
+    }
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+
+    &__item:nth-child(odd) {
+      border-right: 1px solid $color-rule;
+    }
+
+    &__item:nth-child(4n) {
+      border-right: 0;
     }
   }
 
@@ -218,6 +224,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .vehicle-card__picture::after {
     transition: none;
   }
