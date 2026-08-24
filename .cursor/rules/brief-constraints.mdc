@@ -1,0 +1,24 @@
+---
+description: TeamITG brief constraints — stay in starter files, native APIs, no extra libraries
+alwaysApply: true
+---
+
+# Brief constraints
+
+This is the official TeamITG starter. Implement the test in the files it already has. Do not introduce a new app structure.
+
+- All network logic lives in `src/api/index.js` (`getData`) and `src/api/helpers.js` (`request`). No other file may `fetch`.
+- `VehicleList` reads data only through `useData`. Do not call `getData` from components.
+- Native browser APIs over libraries: `fetch`, `<picture>`, native `<dialog>`. No CSS framework. No Redux. No new UI packages.
+- ES6+, Airbnb eslint already in the repo. Keep formatting consistent with files you touch.
+- Mobile-first SCSS with `min-width` media queries. BEM class names.
+- Small Node 18 workarounds (`.npmrc` `legacy-peer-deps`, `NODE_OPTIONS=--openssl-legacy-provider` on start/build) are allowed. Do not upgrade webpack.
+- Keep the original brief README. Add a short design-decisions section if needed; do not replace the brief.
+
+```js
+// ❌ BAD — fetch in a component
+useEffect(() => { fetch('/api/vehicles.json'); }, []);
+
+// ✅ GOOD — VehicleList only uses the hook
+const [loading, error, vehicles] = useData();
+```

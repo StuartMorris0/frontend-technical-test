@@ -1,0 +1,16 @@
+---
+description: Visual source of truth is designs/*.png — match the mockups for a designer review
+alwaysApply: true
+---
+
+# Design fidelity
+
+Match `designs/mobile.png`, `designs/tablet.png`, and `designs/desktop.png` closely enough for a designer review. Pixel-check those PNGs.
+
+- **Mobile:** one column; 1×1 image left; name / `From {price}` / description left-aligned; hairline row dividers.
+- **Tablet:** 2×2; 16×9 images; centred copy; tight grid with hairline rules, not large gutters.
+- **Desktop:** four columns; same card; thin vertical separators between cards.
+- **Hover:** dark overlay on the **image**. Do not fade the title.
+- **Title chrome (tablet/desktop):** short rules the width of the name, not full-width borders on the button.
+- **Price:** near-black. Description: grey that still meets WCAG AA on white.
+- Use the 1×1 and 16×9 assets from `vehicle.media` (`<picture>` + `source media`).

@@ -1,0 +1,24 @@
+---
+description: Keep starter tests; extend coverage for new API, UI, keyboard, and axe
+globs: src/**/__tests__/**
+alwaysApply: false
+---
+
+# Testing
+
+- Unskip `describe.skip` on `src/api/__tests__/api.test.js` once `getData` works. Do not rewrite those five tests.
+- Keep the three VehicleList `data-testid` cases (`loading` / `error` / `results`).
+- Add tests for behaviour we introduce: empty list, merged `description`/`meta`, image helper, modal open/close/reopen, retry if we add it.
+- New assertions should prefer `getByRole` / accessible name over extra test ids.
+- Cover keyboard: Enter/Space opens the card; Escape closes the dialog.
+- Add `jest-axe` (or equivalent) on loading, error, empty, list, and open modal. Fix violations rather than disabling axe.
+- Mock `useData` in component tests; mock `request` in API tests. Do not hit the network.
+
+```js
+// ❌ BAD — replace starter tests with snapshots
+expect(wrapper).toMatchSnapshot();
+
+// ✅ GOOD — keep starter contract, then add a focused case
+expect(queryByTestId('results')).not.toBeNull();
+expect(getByRole('button', { name: /xe/i })).toBeInTheDocument();
+```

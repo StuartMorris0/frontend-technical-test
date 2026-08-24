@@ -1,0 +1,25 @@
+---
+description: WCAG 2.1 AA — semantic HTML, keyboard, live regions, reduced motion
+globs: src/**/*.{js,scss}
+alwaysApply: false
+---
+
+# Accessibility (WCAG 2.1 AA)
+
+- Semantic landmarks and lists: `<main>`, `<ul>/<li>/<article>`, headings, `<dl>` in the modal.
+- Real `<button>` for the card action. Do not make the whole card a clickable `<div>`.
+- Decorative card images: `alt=""`. Do not announce the model name twice.
+- Loading / empty: `role="status"`. Error: `role="alert"` plus a recoverable action.
+- Modal: native `<dialog>.showModal()` (focus trap, Escape, backdrop). Restore focus to the opener on close.
+- Visible `:focus-visible` rings. Honour `prefers-reduced-motion` (no stagger animation).
+- Description grey must meet 4.5:1 contrast on white. Use `eslint-plugin-jsx-a11y`; do not disable rules without a one-line reason.
+
+```js
+// ❌ BAD
+<div onClick={open}>XE</div>
+
+// ✅ GOOD
+<h2>
+  <button type="button" onClick={open}>XE</button>
+</h2>
+```
