@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import VehicleList from '..';
 import useData from '../useData';
 
@@ -31,5 +31,24 @@ describe('<VehicleList /> Tests', () => {
     expect(queryByTestId('loading')).toBeNull();
     expect(queryByTestId('error')).toBeNull();
     expect(queryByTestId('results')).not.toBeNull();
+  });
+
+  it('Should show empty state when the vehicles array is empty', () => {
+    useData.mockReturnValue([false, false, []]);
+    const { queryByTestId } = render(<VehicleList />);
+
+    expect(queryByTestId('empty')).not.toBeNull();
+    expect(queryByTestId('loading')).toBeNull();
+    expect(queryByTestId('error')).toBeNull();
+    expect(queryByTestId('results')).toBeNull();
+  });
+
+  it('Should invoke retry when the error-state button is clicked', () => {
+    const retry = jest.fn();
+    useData.mockReturnValue([false, 'An error occurred', [], retry]);
+    const { getByRole } = render(<VehicleList />);
+
+    fireEvent.click(getByRole('button', { name: /try again/i }));
+    expect(retry).toHaveBeenCalledTimes(1);
   });
 });
