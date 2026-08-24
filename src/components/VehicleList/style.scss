@@ -229,3 +229,79 @@
     transition: none;
   }
 }
+
+.vehicle-details {
+  background: #fff;
+  border: 0;
+  color: $color-text;
+  max-width: 500px;
+  padding: 0;
+  width: 90%;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, .5);
+  }
+
+  &__content {
+    padding: 2rem;
+  }
+
+  &__title {
+    border-bottom: 1px solid currentColor;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin: 0 0 1.5rem;
+    padding-bottom: .5rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    margin: 0 0 1.5rem;
+    padding: 0;
+  }
+
+  &__row {
+    border-bottom: 1px solid $color-rule;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 0;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    dt {
+      font-weight: 700;
+    }
+
+    dd {
+      color: $color-description;
+      margin: 0;
+    }
+  }
+
+  &__close {
+    background: $color-text;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: .875rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    margin: 0 auto;
+    padding: .75rem 2rem;
+    text-transform: uppercase;
+
+    &:hover {
+      background: #333;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-focus;
+      outline-offset: 2px;
+    }
+  }
+}

@@ -5,6 +5,16 @@ import useData from '../useData';
 
 jest.mock('../useData');
 
+if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function showModal() {
+    this.open = true;
+  };
+  HTMLDialogElement.prototype.close = function close() {
+    this.open = false;
+    this.dispatchEvent(new Event('close'));
+  };
+}
+
 const xe = {
   id: 'xe',
   apiUrl: '/api/vehicle_xe.json',
@@ -76,6 +86,38 @@ describe('<VehicleList /> Tests', () => {
 
     fireEvent.click(getByRole('button', { name: /try again/i }));
     expect(retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should reopen the modal after closing the same card', () => {
+    useData.mockReturnValue([false, false, [xe]]);
+
+    const { container, queryByText, getByRole } = render(<VehicleList />);
+    const heading = getByRole('button', { name: /^xe$/i });
+    const dialog = container.querySelector('.vehicle-details');
+
+    fireEvent.click(heading);
+    expect(dialog.open).toBe(true);
+    expect(queryByText(/passengers/i)).not.toBeNull();
+
+    fireEvent.click(container.querySelector('.vehicle-details__close'));
+    expect(dialog.open).toBe(false);
+
+    fireEvent.click(heading);
+    expect(dialog.open).toBe(true);
+    expect(queryByText(/passengers/i)).not.toBeNull();
+  });
+
+  it('Should close the modal when Escape is pressed', () => {
+    useData.mockReturnValue([false, false, [xe]]);
+    const { container, getByRole } = render(<VehicleList />);
+    const dialog = container.querySelector('.vehicle-details');
+
+    fireEvent.click(getByRole('button', { name: /^xe$/i }));
+    expect(dialog.open).toBe(true);
+
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+    dialog.close();
+    expect(dialog.open).toBe(false);
   });
 });
 
