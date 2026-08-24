@@ -17,7 +17,13 @@
   }
 
   &__item {
+    animation: card-enter 400ms ease-out backwards;
+    animation-delay: calc(var(--card-index, 0) * 60ms);
     border-bottom: 1px solid $color-rule;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
 
     &:last-child {
       border-bottom: 0;
@@ -303,5 +309,18 @@
       outline: 2px solid $color-focus;
       outline-offset: 2px;
     }
+  }
+}
+
+@keyframes card-enter {
+
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

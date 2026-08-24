@@ -64,8 +64,12 @@ export default function VehicleList() {
   return (
     <>
       <ul className="vehicle-list" data-testid="results">
-        {vehicles.map((vehicle) => (
-          <li key={vehicle.id} className="vehicle-list__item">
+        {vehicles.map((vehicle, index) => (
+          <li
+            key={vehicle.id}
+            className="vehicle-list__item"
+            style={{ '--card-index': index }}
+          >
             <article className="vehicle-card">
               <picture className="vehicle-card__picture">
                 <source
