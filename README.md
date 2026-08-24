@@ -66,3 +66,12 @@ Use linting to format the code and autofix most of the formatting issues
 ```shell script
 npm run lint
 ```
+
+## Design decisions
+
+- **API.** `request()` wraps native `fetch`. `getData()` loads `/api/vehicles.json`, follows each `apiUrl` with `Promise.allSettled`, and drops failed details or missing prices (XF, `problematic`).
+- **Native APIs.** `<picture>` picks 1×1 vs 16×9. Extra vehicle info uses `<dialog>.showModal()` (focus trap, Escape, backdrop).
+- **Layout.** Mobile-first BEM. Tokens in `src/_variables.scss`. Tight grid and hairline rules to match `designs/`, not large gutters. Hover is a dark overlay on the image.
+- **Accessibility.** WCAG 2.1 AA: `<main>`, list/article semantics, live regions, decorative `alt=""`, `:focus-visible`, `prefers-reduced-motion`. Description `#666` on white meets 4.5:1.
+- **Tests.** Starter API tests unskipped and extended with a merge case. Component tests cover empty, retry, modal reopen, `findMediaUrl`, and jest-axe on each state.
+- **Node 18.** `.npmrc` `legacy-peer-deps=true` and `NODE_OPTIONS=--openssl-legacy-provider` on start/build so the 2021 webpack 4 starter still installs and runs. Webpack was not upgraded.
