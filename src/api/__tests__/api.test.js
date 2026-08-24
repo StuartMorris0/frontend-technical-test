@@ -3,7 +3,7 @@ import { request } from '../helpers';
 
 jest.mock('../helpers');
 
-describe.skip('getData Tests', () => {
+describe('getData Tests', () => {
   const safelyCallApi = async () => {
     try {
       return await getData();
@@ -57,5 +57,28 @@ describe.skip('getData Tests', () => {
     return expect(safelyCallApi()).resolves.toEqual([
       { apiUrl: '/api/xj.json', id: 'xj', price: '£40,000' }
     ]);
+  });
+
+  it('Should merge detail description and meta onto the summary', async () => {
+    request.mockResolvedValueOnce([{
+      id: 'xe',
+      apiUrl: '/api/vehicle_xe.json',
+      media: [],
+    }]);
+    request.mockResolvedValueOnce({
+      id: 'xe',
+      price: '£30,000',
+      description: 'Sports saloon',
+      meta: { passengers: 5 },
+    });
+
+    await expect(safelyCallApi()).resolves.toEqual([{
+      id: 'xe',
+      apiUrl: '/api/vehicle_xe.json',
+      media: [],
+      price: '£30,000',
+      description: 'Sports saloon',
+      meta: { passengers: 5 },
+    }]);
   });
 });
