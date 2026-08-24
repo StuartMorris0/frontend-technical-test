@@ -5,8 +5,16 @@ import './style.scss';
 export const TABLET_BREAKPOINT_PX = 768;
 
 export const findMediaUrl = (media, aspectRatio) => {
+  if (!media || !media.length) return '';
   const match = media.find((m) => m.url.includes(`/${aspectRatio}/`));
   return match ? match.url : media[0].url;
+};
+
+const formatList = (items) => (Array.isArray(items) && items.length ? items.join(', ') : '');
+
+const formatEmissions = (emissions) => {
+  if (!emissions || emissions.value == null) return '';
+  return `${emissions.value} g/km CO\u2082`;
 };
 
 export default function VehicleList() {
@@ -87,7 +95,7 @@ export default function VehicleList() {
                   <button
                     type="button"
                     className="vehicle-card__name-button"
-                    onClick={() => setOpenVehicle(vehicle)}
+                    onClick={vehicle.meta ? () => setOpenVehicle(vehicle) : undefined}
                   >
                     {vehicle.id.toUpperCase()}
                   </button>
@@ -106,34 +114,42 @@ export default function VehicleList() {
         aria-labelledby="vehicle-details-title"
         onClick={handleBackdropClick}
       >
-        {openVehicle && openVehicle.meta && (
+        {openVehicle && (
           <div className="vehicle-details__content">
             <h2 id="vehicle-details-title" className="vehicle-details__title">
               {openVehicle.id.toUpperCase()}
             </h2>
-            <dl className="vehicle-details__list">
-              <div className="vehicle-details__row">
-                <dt>Passengers</dt>
-                <dd>{openVehicle.meta.passengers}</dd>
-              </div>
-              <div className="vehicle-details__row">
-                <dt>Drivetrain</dt>
-                <dd>{openVehicle.meta.drivetrain.join(', ')}</dd>
-              </div>
-              <div className="vehicle-details__row">
-                <dt>Body style</dt>
-                <dd>{openVehicle.meta.bodystyles.join(', ')}</dd>
-              </div>
-              <div className="vehicle-details__row">
-                <dt>Emissions</dt>
-                <dd>
-                  {openVehicle.meta.emissions.value}
-                  {' '}
-                  g/km CO
-                  <sub>2</sub>
-                </dd>
-              </div>
-            </dl>
+            {openVehicle.meta && (
+              <dl className="vehicle-details__list">
+                <div className="vehicle-details__row">
+                  <dt>Passengers</dt>
+                  <dd>{openVehicle.meta.passengers}</dd>
+                </div>
+                {formatList(openVehicle.meta.drivetrain) && (
+                  <div className="vehicle-details__row">
+                    <dt>Drivetrain</dt>
+                    <dd>{formatList(openVehicle.meta.drivetrain)}</dd>
+                  </div>
+                )}
+                {formatList(openVehicle.meta.bodystyles) && (
+                  <div className="vehicle-details__row">
+                    <dt>Body style</dt>
+                    <dd>{formatList(openVehicle.meta.bodystyles)}</dd>
+                  </div>
+                )}
+                {formatEmissions(openVehicle.meta.emissions) && (
+                  <div className="vehicle-details__row">
+                    <dt>Emissions</dt>
+                    <dd>
+                      {openVehicle.meta.emissions.value}
+                      {' '}
+                      g/km CO
+                      <sub>2</sub>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            )}
             <button
               type="button"
               className="vehicle-details__close"
