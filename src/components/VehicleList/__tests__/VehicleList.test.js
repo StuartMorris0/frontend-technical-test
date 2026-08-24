@@ -1,7 +1,10 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { axe, toHaveNoViolations } from 'jest-axe';
 import VehicleList, { findMediaUrl } from '..';
 import useData from '../useData';
+
+expect.extend(toHaveNoViolations);
 
 jest.mock('../useData');
 
@@ -118,6 +121,30 @@ describe('<VehicleList /> Tests', () => {
     fireEvent.keyDown(dialog, { key: 'Escape' });
     dialog.close();
     expect(dialog.open).toBe(false);
+  });
+
+  it('Should have no axe violations on the list, empty, error, loading, and open modal', async () => {
+    useData.mockReturnValue([true, false, []]);
+    const loading = render(<VehicleList />);
+    expect(await axe(loading.container)).toHaveNoViolations();
+    loading.unmount();
+
+    useData.mockReturnValue([false, true, [], jest.fn()]);
+    const errored = render(<VehicleList />);
+    expect(await axe(errored.container)).toHaveNoViolations();
+    errored.unmount();
+
+    useData.mockReturnValue([false, false, []]);
+    const empty = render(<VehicleList />);
+    expect(await axe(empty.container)).toHaveNoViolations();
+    empty.unmount();
+
+    useData.mockReturnValue([false, false, [xe]]);
+    const list = render(<VehicleList />);
+    expect(await axe(list.container)).toHaveNoViolations();
+
+    fireEvent.click(list.getByRole('button', { name: /^xe$/i }));
+    expect(await axe(list.container)).toHaveNoViolations();
   });
 });
 
