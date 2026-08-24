@@ -48,6 +48,16 @@
     "react-dom": "^17.0.1"
   },
   "overrides": {
+    "css-loader": {
+      "postcss": "8.4.49"
+    },
+    "stylelint": {
+      "postcss": "8.4.49",
+      "postcss-scss": "3.0.5"
+    },
+    "stylelint-order": {
+      "postcss": "7.0.39"
+    },
     "websocket-driver": "^0.7.4"
   },
   "jest": {
