@@ -72,40 +72,53 @@ export default function VehicleList() {
   return (
     <>
       <ul className="vehicle-list" data-testid="results">
-        {vehicles.map((vehicle, index) => (
-          <li
-            key={vehicle.id}
-            className="vehicle-list__item"
-            style={{ '--card-index': index }}
-          >
-            <article className="vehicle-card">
-              <picture className="vehicle-card__picture">
-                <source
-                  media={`(min-width: ${TABLET_BREAKPOINT_PX}px)`}
-                  srcSet={findMediaUrl(vehicle.media, '16x9')}
-                />
-                <img
-                  src={findMediaUrl(vehicle.media, '1x1')}
-                  className="vehicle-card__image"
-                  alt=""
-                />
-              </picture>
-              <div className="vehicle-card__body">
-                <h2 className="vehicle-card__name">
-                  <button
-                    type="button"
-                    className="vehicle-card__name-button"
-                    onClick={vehicle.meta ? () => setOpenVehicle(vehicle) : undefined}
-                  >
-                    {vehicle.id.toUpperCase()}
-                  </button>
-                </h2>
-                <p className="vehicle-card__price">{`From ${vehicle.price}`}</p>
-                <p className="vehicle-card__description">{vehicle.description}</p>
-              </div>
-            </article>
-          </li>
-        ))}
+        {vehicles.map((vehicle, index) => {
+          const image1x1 = findMediaUrl(vehicle.media, '1x1');
+          const image16x9 = findMediaUrl(vehicle.media, '16x9');
+
+          return (
+            <li
+              key={vehicle.id}
+              className="vehicle-list__item"
+              style={{ '--card-index': index }}
+            >
+              <article className="vehicle-card">
+                <picture className="vehicle-card__picture">
+                  {image16x9 && (
+                  <source
+                    media={`(min-width: ${TABLET_BREAKPOINT_PX}px)`}
+                    srcSet={image16x9}
+                  />
+                  )}
+                  {image1x1 && (
+                  <img
+                    src={image1x1}
+                    className="vehicle-card__image"
+                    alt=""
+                  />
+                  )}
+                </picture>
+                <div className="vehicle-card__body">
+                  <h2 className="vehicle-card__name">
+                    <button
+                      type="button"
+                      className="vehicle-card__name-button"
+                      onClick={vehicle.meta ? () => setOpenVehicle(vehicle) : undefined}
+                    >
+                      {vehicle.id.toUpperCase()}
+                    </button>
+                  </h2>
+                  <p className="vehicle-card__price">
+                    <span className="vehicle-card__price-from">From</span>
+                    {' '}
+                    {vehicle.price}
+                  </p>
+                  <p className="vehicle-card__description">{vehicle.description}</p>
+                </div>
+              </article>
+            </li>
+          );
+        })}
       </ul>
       {/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- Escape and Close cover keyboard */}
       <dialog

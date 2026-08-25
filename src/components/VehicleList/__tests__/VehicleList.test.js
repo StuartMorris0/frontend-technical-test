@@ -68,8 +68,19 @@ describe('<VehicleList /> Tests', () => {
     const { getByRole, getByText } = render(<VehicleList />);
 
     expect(getByRole('button', { name: /^xe$/i })).not.toBeNull();
-    expect(getByText('From £30,000')).not.toBeNull();
+    expect(getByText(/from/i)).not.toBeNull();
+    expect(getByText('£30,000')).not.toBeNull();
     expect(getByText(/most advanced, efficient and refined/i)).not.toBeNull();
+  });
+
+  it('Should expose a keyboard-focusable card button for each vehicle', () => {
+    useData.mockReturnValue([false, false, [xe]]);
+    const { getByRole } = render(<VehicleList />);
+    const button = getByRole('button', { name: /^xe$/i });
+
+    expect(button.getAttribute('type')).toBe('button');
+    button.focus();
+    expect(document.activeElement).toBe(button);
   });
 
   it('Should show empty state when the vehicles array is empty', () => {

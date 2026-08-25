@@ -1,8 +1,15 @@
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 1024px;
 
-$color-text: #1a1a1a;
-$color-description: #666;
+$font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$color-title: #1a1a1a;
+$color-price: #4a4a4a;
+$color-description: #757575;
+$color-text: $color-title;
 $color-rule: #e0e0e0;
 $color-overlay: rgba(0, 0, 0, .4);
 $color-focus: #0066cc;
+
+$letter-spacing-title: .1em;
+$letter-spacing-price-from: .14em;

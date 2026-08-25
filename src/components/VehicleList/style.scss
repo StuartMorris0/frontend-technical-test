@@ -172,14 +172,16 @@
   }
 
   &__name {
+    color: $color-title;
     font-size: 1rem;
     font-weight: 700;
-    letter-spacing: .05em;
-    margin: 0 0 .25rem;
+    letter-spacing: $letter-spacing-title;
+    line-height: 1.2;
+    margin: 0 0 .375rem;
     text-transform: uppercase;
 
     @media (min-width: $breakpoint-tablet) {
-      margin: 0 0 .75rem;
+      margin: 0 0 .625rem;
     }
   }
 
@@ -190,6 +192,7 @@
     cursor: pointer;
     font: inherit;
     letter-spacing: inherit;
+    line-height: inherit;
     margin: 0;
     padding: 0;
     text-align: inherit;
@@ -210,25 +213,36 @@
     }
 
     @media (min-width: $breakpoint-tablet) {
-      border-bottom: 1px solid currentColor;
-      border-top: 1px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      border-top: 2px solid currentColor;
       display: inline-block;
-      padding: .5rem 0;
+      padding: .3125rem 0;
     }
   }
 
   &__price {
-    color: $color-text;
+    color: $color-price;
     font-size: .875rem;
     font-weight: 400;
-    margin: 0 0 .5rem;
+    letter-spacing: .02em;
+    line-height: 1.4;
+    margin: 0 0 .375rem;
+  }
+
+  &__price-from {
+    letter-spacing: $letter-spacing-price-from;
   }
 
   &__description {
     color: $color-description;
-    font-size: .875rem;
-    font-weight: 300;
+    font-size: .8125rem;
+    font-weight: 400;
+    line-height: 1.45;
     margin: 0;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: .875rem;
+    }
   }
 }
 
@@ -256,12 +270,14 @@
   }
 
   &__title {
-    border-bottom: 1px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    color: $color-title;
     font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: .05em;
+    letter-spacing: $letter-spacing-title;
+    line-height: 1.2;
     margin: 0 0 1.5rem;
-    padding-bottom: .5rem;
+    padding-bottom: .3125rem;
     text-align: center;
     text-transform: uppercase;
   }

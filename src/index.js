@@ -6,6 +6,7 @@ import './global-styles.scss';
 ReactDOM.render(
   <React.StrictMode>
     <main>
+      <h1 className="visually-hidden">Vehicle range</h1>
       <VehicleList />
     </main>
   </React.StrictMode>,
